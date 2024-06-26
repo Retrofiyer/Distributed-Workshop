@@ -17,7 +17,7 @@ const readData = async () => {
      return JSON.parse(data);
    } catch (error) {
      console.error('Error reading file:', error);
-     return { users: [] };
+     return { user: [] };
    }
  };
 
@@ -38,14 +38,14 @@ const readData = async () => {
  //Endpoint show users in json format
  app.get('/users', async (req, res) => {
    const usuarios = await readData();
-   res.json(usuarios.user);
+   res.json(users.user);
  });
  
  //Endpoint search users to id
  app.get('/users/:id', async (req, res) => {
    const data = await readData();
    const id = parseInt(req.params.id);
-   const user = data.usuario.find((user) => user.id === id);
+   const user = data.user.find((user) => user.id === id);
    if (user) {
      res.json(user);
    } else {
@@ -54,7 +54,7 @@ const readData = async () => {
  });
 
  //Endpoint upload new user
- app.post('/usuers', async (req, res) => {
+ app.post('/users', async (req, res) => {
    const data = await readData();
    const body = req.body;
  
@@ -64,10 +64,10 @@ const readData = async () => {
 
    // Method create new user
    const newUser = {
-     id: data.usuario.length ? Math.max(...data.usuario.map(user => user.id)) + 1 : 1,
+     id: data.user.length ? Math.max(...data.user.map(user => user.id)) + 1 : 1,
      ...body,
    };
-   data.usuario.push(newUser);
+   data.user.push(newUser);
    await writeData(data);
    res.status(201).json(newUser);
  });
