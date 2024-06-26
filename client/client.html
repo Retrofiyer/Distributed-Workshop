@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIRest</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+        }
+        .form-container, .data-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 45%;
+        }
+        input {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .user-data {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Ingresar Datos del Usuario</h2>
+        <label for="firstName">Nombre:</label>
+        <input type="text" id="firstName" placeholder="Nombre">
+        <label for="lastName">Apellido:</label>
+        <input type="text" id="lastName" placeholder="Apellido">
+        <label for="age">Edad:</label>
+        <input type="number" id="age" placeholder="Edad">
+        <button onclick="addUser()">Ingresar Datos</button>
+        <button onclick="getUsers()">Mostrar Usuarios</button>
+    </div>
+    <div class="data-container">
+        <h2>Datos de los Usuarios</h2>
+        <div id="usersData"></div>
+    </div>
+
+    <script>
+        const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000/usuarios' : 'https://rest-api-form.vercel.app/usuarios';
+
+        console.log('API URL:', apiUrl);
+
+        async function addUser() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const age = document.getElementById('age').value;
+
+            if (firstName && lastName && age) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ firstName, lastName, age: parseInt(age) })
+                    });
+
+                    if (response.ok) {
+                        alert('Usuario añadido correctamente');
+                        document.getElementById('firstName').value = '';
+                        document.getElementById('lastName').value = '';
+                        document.getElementById('age').value = '';
+                    } else {
+                        alert('Error al añadir el usuario');
+                    }
+                } catch (error) {
+                    alert('Error de conexión: ' + error.message);
+                }
+            } else {
+                alert('Todos los campos son obligatorios');
+            }
+        }
+
+        async function getUsers() {
+            try {
+                const response = await fetch(apiUrl);
+                const users = await response.json();
+                const usersDataDiv = document.getElementById('usersData');
+                usersDataDiv.innerHTML = '';
+
+                if (users.length > 0) {
+                    users.forEach(user => {
+                        const userDiv = document.createElement('div');
+                        userDiv.classList.add('user-data');
+                        userDiv.innerHTML = `<strong>ID:</strong> ${user.id} <br>
+                                             <strong>Nombre:</strong> ${user.firstName} <br>
+                                             <strong>Apellido:</strong> ${user.lastName} <br>
+                                             <strong>Edad:</strong> ${user.age} <br>`;
+                        usersDataDiv.appendChild(userDiv);
+                    });
+                } else {
+                    usersDataDiv.innerHTML = 'No hay usuarios disponibles';
+                }
+            } catch (error) {
+                alert('Error de conexión: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
