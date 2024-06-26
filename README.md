@@ -25,11 +25,11 @@ Installation
 2. Install Dependencies:
 
 ```bash
-  npm install
+npm install
 ```
 
 3. Start Repo:
 
-  ```bash
-  npm start
+```bash
+npm start
 ```
