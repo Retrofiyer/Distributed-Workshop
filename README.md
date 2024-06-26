@@ -18,9 +18,10 @@ Express: Web framework for Node.js.
 
 Installation
 1. Clone the repository:
-     
-     git clone <https://github.com/Retrofiyer/Distributed-Workshop.git>
-     cd <Distributed-Workshop>
+```bash
+git clone <https://github.com/Retrofiyer/Distributed-Workshop.git>
+cd <Distributed-Workshop>
+``` 
 
 2. Install Dependencies:
 
